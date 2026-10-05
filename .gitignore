@@ -1,0 +1,10 @@
+**/target/
+.env
+.env.*
+!.env.example
+*.log
+*.jwk
+*.mv.db
+*.trace.db
+.DS_Store
+__pycache__/

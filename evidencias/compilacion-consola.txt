@@ -1,0 +1,507 @@
+ Image banco/config-server:1.0.0 Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 671B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 643B done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/maven:3.9.11-eclipse-temurin-21
+#3 ...
+
+#4 [internal] load metadata for docker.io/library/eclipse-temurin:21-jre-alpine
+#4 DONE 0.6s
+
+#3 [internal] load metadata for docker.io/library/maven:3.9.11-eclipse-temurin-21
+#3 DONE 0.6s
+
+#5 [internal] load .dockerignore
+#5 transferring context: 118B done
+#5 DONE 0.0s
+
+#6 [build 1/4] FROM docker.io/library/maven:3.9.11-eclipse-temurin-21@sha256:6fdc855a6ed81d288ca7ca37ac6ff5e9308b612485c0801d70b25a858c83d237
+#6 resolve docker.io/library/maven:3.9.11-eclipse-temurin-21@sha256:6fdc855a6ed81d288ca7ca37ac6ff5e9308b612485c0801d70b25a858c83d237 done
+#6 DONE 0.0s
+
+#7 [stage-1 1/5] FROM docker.io/library/eclipse-temurin:21-jre-alpine@sha256:51ab5e3302e7141ce665ca3ea85e8b5cd648eafbc3c0c90dd79d6537684e4555
+#7 resolve docker.io/library/eclipse-temurin:21-jre-alpine@sha256:51ab5e3302e7141ce665ca3ea85e8b5cd648eafbc3c0c90dd79d6537684e4555 done
+#7 DONE 0.0s
+
+#8 [internal] load build context
+#8 transferring context: 14.09kB done
+#8 DONE 0.0s
+
+#9 [build 2/4] WORKDIR /src
+#9 CACHED
+
+#10 [stage-1 2/5] RUN apk add --no-cache curl && addgroup -S bank && adduser -S -G bank bank && mkdir /data && chown bank:bank /data
+#10 CACHED
+
+#11 [stage-1 3/5] WORKDIR /app
+#11 CACHED
+
+#12 [stage-1 4/5] COPY config-repo /config-repo
+#12 DONE 0.0s
+
+#13 [build 3/4] COPY . .
+#13 DONE 0.0s
+
+#14 [build 4/4] RUN --mount=type=cache,target=/root/.m2 mvn -B -ntp verify
+#14 0.607 [INFO] Scanning for projects...
+#14 0.716 [INFO] ------------------------------------------------------------------------
+#14 0.716 [INFO] Reactor Build Order:
+#14 0.716 [INFO] 
+#14 0.716 [INFO] banco-cloud                                                        [pom]
+#14 0.716 [INFO] config-server                                                      [jar]
+#14 0.716 [INFO] discovery-server                                                   [jar]
+#14 0.716 [INFO] auth-server                                                        [jar]
+#14 0.716 [INFO] account-service                                                    [jar]
+#14 0.716 [INFO] movement-service                                                   [jar]
+#14 0.716 [INFO] web-bff                                                            [jar]
+#14 0.716 [INFO] mobile-bff                                                         [jar]
+#14 0.716 [INFO] atm-bff                                                            [jar]
+#14 0.716 [INFO] operaciones-service                                                [jar]
+#14 0.716 [INFO] auditoria-service                                                  [jar]
+#14 0.721 [INFO] 
+#14 0.721 [INFO] ---------------------< cl.duoc.banco:banco-cloud >----------------------
+#14 0.721 [INFO] Building banco-cloud 1.0.0                                        [1/11]
+#14 0.722 [INFO]   from pom.xml
+#14 0.722 [INFO] --------------------------------[ pom ]---------------------------------
+#14 0.751 [INFO] 
+#14 0.751 [INFO] --- spring-boot:3.5.16:repackage (repackage) @ banco-cloud ---
+#14 1.007 [INFO] 
+#14 1.007 [INFO] --------------------< cl.duoc.banco:config-server >---------------------
+#14 1.007 [INFO] Building config-server 1.0.0                                      [2/11]
+#14 1.007 [INFO]   from config-server/pom.xml
+#14 1.007 [INFO] --------------------------------[ jar ]---------------------------------
+#14 1.132 [INFO] 
+#14 1.132 [INFO] --- resources:3.3.1:resources (default-resources) @ config-server ---
+#14 1.159 [INFO] Copying 1 resource from src/main/resources to target/classes
+#14 1.164 [INFO] Copying 0 resource from src/main/resources to target/classes
+#14 1.164 [INFO] 
+#14 1.164 [INFO] --- compiler:3.14.1:compile (default-compile) @ config-server ---
+#14 1.200 [INFO] Recompiling the module because of changed source code.
+#14 1.204 [INFO] Compiling 2 source files with javac [debug parameters release 21] to target/classes
+#14 1.532 [INFO] 
+#14 1.532 [INFO] --- resources:3.3.1:testResources (default-testResources) @ config-server ---
+#14 1.534 [INFO] skip non existing resourceDirectory /src/config-server/src/test/resources
+#14 1.534 [INFO] 
+#14 1.534 [INFO] --- compiler:3.14.1:testCompile (default-testCompile) @ config-server ---
+#14 1.536 [INFO] No sources to compile
+#14 1.536 [INFO] 
+#14 1.536 [INFO] --- surefire:3.5.6:test (default-test) @ config-server ---
+#14 1.586 [INFO] No tests to run.
+#14 1.590 [INFO] 
+#14 1.590 [INFO] --- jar:3.4.2:jar (default-jar) @ config-server ---
+#14 1.681 [INFO] Building jar: /src/config-server/target/config-server-1.0.0.jar
+#14 1.696 [INFO] 
+#14 1.696 [INFO] --- spring-boot:3.5.16:repackage (repackage) @ config-server ---
+#14 1.890 [INFO] Replacing main artifact /src/config-server/target/config-server-1.0.0.jar with repackaged archive, adding nested dependencies in BOOT-INF/.
+#14 1.890 [INFO] The original artifact has been renamed to /src/config-server/target/config-server-1.0.0.jar.original
+#14 1.891 [INFO] 
+#14 1.891 [INFO] -------------------< cl.duoc.banco:discovery-server >-------------------
+#14 1.891 [INFO] Building discovery-server 1.0.0                                   [3/11]
+#14 1.891 [INFO]   from discovery-server/pom.xml
+#14 1.891 [INFO] --------------------------------[ jar ]---------------------------------
+#14 1.957 [INFO] 
+#14 1.957 [INFO] --- resources:3.3.1:resources (default-resources) @ discovery-server ---
+#14 1.959 [INFO] Copying 1 resource from src/main/resources to target/classes
+#14 1.959 [INFO] Copying 0 resource from src/main/resources to target/classes
+#14 1.960 [INFO] 
+#14 1.960 [INFO] --- compiler:3.14.1:compile (default-compile) @ discovery-server ---
+#14 1.962 [INFO] Recompiling the module because of changed source code.
+#14 1.962 [INFO] Compiling 2 source files with javac [debug parameters release 21] to target/classes
+#14 2.151 [INFO] 
+#14 2.151 [INFO] --- resources:3.3.1:testResources (default-testResources) @ discovery-server ---
+#14 2.152 [INFO] skip non existing resourceDirectory /src/discovery-server/src/test/resources
+#14 2.152 [INFO] 
+#14 2.152 [INFO] --- compiler:3.14.1:testCompile (default-testCompile) @ discovery-server ---
+#14 2.153 [INFO] No sources to compile
+#14 2.153 [INFO] 
+#14 2.153 [INFO] --- surefire:3.5.6:test (default-test) @ discovery-server ---
+#14 2.158 [INFO] No tests to run.
+#14 2.158 [INFO] 
+#14 2.158 [INFO] --- jar:3.4.2:jar (default-jar) @ discovery-server ---
+#14 2.161 [INFO] Building jar: /src/discovery-server/target/discovery-server-1.0.0.jar
+#14 2.163 [INFO] 
+#14 2.163 [INFO] --- spring-boot:3.5.16:repackage (repackage) @ discovery-server ---
+#14 2.430 [INFO] Replacing main artifact /src/discovery-server/target/discovery-server-1.0.0.jar with repackaged archive, adding nested dependencies in BOOT-INF/.
+#14 2.430 [INFO] The original artifact has been renamed to /src/discovery-server/target/discovery-server-1.0.0.jar.original
+#14 2.430 [INFO] 
+#14 2.430 [INFO] ---------------------< cl.duoc.banco:auth-server >----------------------
+#14 2.430 [INFO] Building auth-server 1.0.0                                        [4/11]
+#14 2.430 [INFO]   from auth-server/pom.xml
+#14 2.430 [INFO] --------------------------------[ jar ]---------------------------------
+#14 2.446 [INFO] 
+#14 2.446 [INFO] --- resources:3.3.1:resources (default-resources) @ auth-server ---
+#14 2.447 [INFO] Copying 1 resource from src/main/resources to target/classes
+#14 2.448 [INFO] Copying 0 resource from src/main/resources to target/classes
+#14 2.448 [INFO] 
+#14 2.448 [INFO] --- compiler:3.14.1:compile (default-compile) @ auth-server ---
+#14 2.450 [INFO] Recompiling the module because of changed source code.
+#14 2.450 [INFO] Compiling 2 source files with javac [debug parameters release 21] to target/classes
+#14 2.553 [INFO] 
+#14 2.553 [INFO] --- resources:3.3.1:testResources (default-testResources) @ auth-server ---
+#14 2.553 [INFO] skip non existing resourceDirectory /src/auth-server/src/test/resources
+#14 2.553 [INFO] 
+#14 2.553 [INFO] --- compiler:3.14.1:testCompile (default-testCompile) @ auth-server ---
+#14 2.554 [INFO] No sources to compile
+#14 2.554 [INFO] 
+#14 2.554 [INFO] --- surefire:3.5.6:test (default-test) @ auth-server ---
+#14 2.555 [INFO] No tests to run.
+#14 2.556 [INFO] 
+#14 2.556 [INFO] --- jar:3.4.2:jar (default-jar) @ auth-server ---
+#14 2.557 [INFO] Building jar: /src/auth-server/target/auth-server-1.0.0.jar
+#14 2.559 [INFO] 
+#14 2.559 [INFO] --- spring-boot:3.5.16:repackage (repackage) @ auth-server ---
+#14 2.676 [INFO] Replacing main artifact /src/auth-server/target/auth-server-1.0.0.jar with repackaged archive, adding nested dependencies in BOOT-INF/.
+#14 2.676 [INFO] The original artifact has been renamed to /src/auth-server/target/auth-server-1.0.0.jar.original
+#14 2.676 [INFO] 
+#14 2.676 [INFO] -------------------< cl.duoc.banco:account-service >--------------------
+#14 2.676 [INFO] Building account-service 1.0.0                                    [5/11]
+#14 2.676 [INFO]   from account-service/pom.xml
+#14 2.676 [INFO] --------------------------------[ jar ]---------------------------------
+#14 2.688 [INFO] 
+#14 2.689 [INFO] --- resources:3.3.1:resources (default-resources) @ account-service ---
+#14 2.690 [INFO] Copying 1 resource from src/main/resources to target/classes
+#14 2.691 [INFO] Copying 1 resource from ../legacy-data to target/classes/legacy
+#14 2.691 [INFO] 
+#14 2.691 [INFO] --- compiler:3.14.1:compile (default-compile) @ account-service ---
+#14 2.693 [INFO] Recompiling the module because of changed source code.
+#14 2.693 [INFO] Compiling 6 source files with javac [debug parameters release 21] to target/classes
+#14 2.812 [INFO] 
+#14 2.812 [INFO] --- resources:3.3.1:testResources (default-testResources) @ account-service ---
+#14 2.813 [INFO] skip non existing resourceDirectory /src/account-service/src/test/resources
+#14 2.813 [INFO] 
+#14 2.813 [INFO] --- compiler:3.14.1:testCompile (default-testCompile) @ account-service ---
+#14 2.815 [INFO] Recompiling the module because of changed dependency.
+#14 2.815 [INFO] Compiling 1 source file with javac [debug parameters release 21] to target/test-classes
+#14 2.928 [INFO] 
+#14 2.928 [INFO] --- surefire:3.5.6:test (default-test) @ account-service ---
+#14 2.934 [INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+#14 2.949 [INFO] 
+#14 2.949 [INFO] -------------------------------------------------------
+#14 2.949 [INFO]  T E S T S
+#14 2.949 [INFO] -------------------------------------------------------
+#14 3.219 [INFO] Running cl.duoc.bank.account.LegacyAccountRepositoryTest
+#14 3.287 [INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.060 s -- in cl.duoc.bank.account.LegacyAccountRepositoryTest
+#14 3.295 [INFO] 
+#14 3.295 [INFO] Results:
+#14 3.295 [INFO] 
+#14 3.296 [INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
+#14 3.296 [INFO] 
+#14 3.297 [INFO] 
+#14 3.297 [INFO] --- jar:3.4.2:jar (default-jar) @ account-service ---
+#14 3.300 [INFO] Building jar: /src/account-service/target/account-service-1.0.0.jar
+#14 3.303 [INFO] 
+#14 3.303 [INFO] --- spring-boot:3.5.16:repackage (repackage) @ account-service ---
+#14 3.368 [INFO] Replacing main artifact /src/account-service/target/account-service-1.0.0.jar with repackaged archive, adding nested dependencies in BOOT-INF/.
+#14 3.368 [INFO] The original artifact has been renamed to /src/account-service/target/account-service-1.0.0.jar.original
+#14 3.368 [INFO] 
+#14 3.368 [INFO] -------------------< cl.duoc.banco:movement-service >-------------------
+#14 3.368 [INFO] Building movement-service 1.0.0                                   [6/11]
+#14 3.369 [INFO]   from movement-service/pom.xml
+#14 3.369 [INFO] --------------------------------[ jar ]---------------------------------
+#14 3.374 [INFO] 
+#14 3.374 [INFO] --- resources:3.3.1:resources (default-resources) @ movement-service ---
+#14 3.376 [INFO] Copying 1 resource from src/main/resources to target/classes
+#14 3.376 [INFO] Copying 2 resources from ../legacy-data to target/classes/legacy
+#14 3.376 [INFO] 
+#14 3.376 [INFO] --- compiler:3.14.1:compile (default-compile) @ movement-service ---
+#14 3.378 [INFO] Recompiling the module because of changed source code.
+#14 3.378 [INFO] Compiling 5 source files with javac [debug parameters release 21] to target/classes
+#14 3.461 [INFO] 
+#14 3.461 [INFO] --- resources:3.3.1:testResources (default-testResources) @ movement-service ---
+#14 3.462 [INFO] skip non existing resourceDirectory /src/movement-service/src/test/resources
+#14 3.462 [INFO] 
+#14 3.462 [INFO] --- compiler:3.14.1:testCompile (default-testCompile) @ movement-service ---
+#14 3.463 [INFO] Recompiling the module because of changed dependency.
+#14 3.463 [INFO] Compiling 1 source file with javac [debug parameters release 21] to target/test-classes
+#14 3.529 [INFO] 
+#14 3.529 [INFO] --- surefire:3.5.6:test (default-test) @ movement-service ---
+#14 3.531 [INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+#14 3.532 [INFO] 
+#14 3.532 [INFO] -------------------------------------------------------
+#14 3.532 [INFO]  T E S T S
+#14 3.532 [INFO] -------------------------------------------------------
+#14 3.754 [INFO] Running cl.duoc.bank.movement.LegacyMovementRepositoryTest
+#14 3.829 [INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.070 s -- in cl.duoc.bank.movement.LegacyMovementRepositoryTest
+#14 3.838 [INFO] 
+#14 3.838 [INFO] Results:
+#14 3.838 [INFO] 
+#14 3.838 [INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+#14 3.838 [INFO] 
+#14 3.839 [INFO] 
+#14 3.839 [INFO] --- jar:3.4.2:jar (default-jar) @ movement-service ---
+#14 3.841 [INFO] Building jar: /src/movement-service/target/movement-service-1.0.0.jar
+#14 3.849 [INFO] 
+#14 3.849 [INFO] --- spring-boot:3.5.16:repackage (repackage) @ movement-service ---
+#14 3.933 [INFO] Replacing main artifact /src/movement-service/target/movement-service-1.0.0.jar with repackaged archive, adding nested dependencies in BOOT-INF/.
+#14 3.933 [INFO] The original artifact has been renamed to /src/movement-service/target/movement-service-1.0.0.jar.original
+#14 3.933 [INFO] 
+#14 3.933 [INFO] -----------------------< cl.duoc.banco:web-bff >------------------------
+#14 3.933 [INFO] Building web-bff 1.0.0                                            [7/11]
+#14 3.933 [INFO]   from web-bff/pom.xml
+#14 3.933 [INFO] --------------------------------[ jar ]---------------------------------
+#14 3.939 [INFO] 
+#14 3.939 [INFO] --- resources:3.3.1:resources (default-resources) @ web-bff ---
+#14 3.942 [INFO] Copying 1 resource from src/main/resources to target/classes
+#14 3.943 [INFO] Copying 1 resource from src/main/resources to target/classes
+#14 3.943 [INFO] 
+#14 3.943 [INFO] --- compiler:3.14.1:compile (default-compile) @ web-bff ---
+#14 3.945 [INFO] Recompiling the module because of changed source code.
+#14 3.945 [INFO] Compiling 6 source files with javac [debug parameters release 21] to target/classes
+#14 4.031 [INFO] 
+#14 4.031 [INFO] --- resources:3.3.1:testResources (default-testResources) @ web-bff ---
+#14 4.032 [INFO] skip non existing resourceDirectory /src/web-bff/src/test/resources
+#14 4.032 [INFO] 
+#14 4.032 [INFO] --- compiler:3.14.1:testCompile (default-testCompile) @ web-bff ---
+#14 4.034 [INFO] Recompiling the module because of changed dependency.
+#14 4.034 [INFO] Compiling 1 source file with javac [debug parameters release 21] to target/test-classes
+#14 4.102 [INFO] 
+#14 4.102 [INFO] --- surefire:3.5.6:test (default-test) @ web-bff ---
+#14 4.104 [INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+#14 4.105 [INFO] 
+#14 4.105 [INFO] -------------------------------------------------------
+#14 4.105 [INFO]  T E S T S
+#14 4.105 [INFO] -------------------------------------------------------
+#14 4.274 [INFO] Running cl.duoc.bank.web.WebDashboardServiceTest
+#14 4.389 Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build as described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
+#14 4.463 OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+#14 4.489 WARNING: A Java agent has been loaded dynamically (/root/.m2/repository/net/bytebuddy/byte-buddy-agent/1.17.8/byte-buddy-agent-1.17.8.jar)
+#14 4.489 WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+#14 4.489 WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+#14 4.489 WARNING: Dynamic loading of agents will be disallowed by default in a future release
+#14 4.672 [INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.395 s -- in cl.duoc.bank.web.WebDashboardServiceTest
+#14 4.679 [INFO] 
+#14 4.679 [INFO] Results:
+#14 4.679 [INFO] 
+#14 4.679 [INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+#14 4.679 [INFO] 
+#14 4.680 [INFO] 
+#14 4.680 [INFO] --- jar:3.4.2:jar (default-jar) @ web-bff ---
+#14 4.682 [INFO] Building jar: /src/web-bff/target/web-bff-1.0.0.jar
+#14 4.684 [INFO] 
+#14 4.684 [INFO] --- spring-boot:3.5.16:repackage (repackage) @ web-bff ---
+#14 4.760 [INFO] Replacing main artifact /src/web-bff/target/web-bff-1.0.0.jar with repackaged archive, adding nested dependencies in BOOT-INF/.
+#14 4.760 [INFO] The original artifact has been renamed to /src/web-bff/target/web-bff-1.0.0.jar.original
+#14 4.760 [INFO] 
+#14 4.760 [INFO] ----------------------< cl.duoc.banco:mobile-bff >----------------------
+#14 4.760 [INFO] Building mobile-bff 1.0.0                                         [8/11]
+#14 4.760 [INFO]   from mobile-bff/pom.xml
+#14 4.760 [INFO] --------------------------------[ jar ]---------------------------------
+#14 4.766 [INFO] 
+#14 4.766 [INFO] --- resources:3.3.1:resources (default-resources) @ mobile-bff ---
+#14 4.768 [INFO] Copying 1 resource from src/main/resources to target/classes
+#14 4.768 [INFO] Copying 1 resource from src/main/resources to target/classes
+#14 4.768 [INFO] 
+#14 4.768 [INFO] --- compiler:3.14.1:compile (default-compile) @ mobile-bff ---
+#14 4.770 [INFO] Recompiling the module because of changed source code.
+#14 4.771 [INFO] Compiling 6 source files with javac [debug parameters release 21] to target/classes
+#14 4.851 [INFO] 
+#14 4.851 [INFO] --- resources:3.3.1:testResources (default-testResources) @ mobile-bff ---
+#14 4.851 [INFO] skip non existing resourceDirectory /src/mobile-bff/src/test/resources
+#14 4.852 [INFO] 
+#14 4.852 [INFO] --- compiler:3.14.1:testCompile (default-testCompile) @ mobile-bff ---
+#14 4.853 [INFO] Recompiling the module because of changed dependency.
+#14 4.853 [INFO] Compiling 1 source file with javac [debug parameters release 21] to target/test-classes
+#14 4.937 [INFO] 
+#14 4.937 [INFO] --- surefire:3.5.6:test (default-test) @ mobile-bff ---
+#14 4.939 [INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+#14 4.941 [INFO] 
+#14 4.941 [INFO] -------------------------------------------------------
+#14 4.941 [INFO]  T E S T S
+#14 4.941 [INFO] -------------------------------------------------------
+#14 5.418 [INFO] Running cl.duoc.bank.mobile.MobileHomeServiceTest
+#14 5.545 Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build as described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
+#14 5.699 OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+#14 5.745 WARNING: A Java agent has been loaded dynamically (/root/.m2/repository/net/bytebuddy/byte-buddy-agent/1.17.8/byte-buddy-agent-1.17.8.jar)
+#14 5.745 WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+#14 5.745 WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+#14 5.745 WARNING: Dynamic loading of agents will be disallowed by default in a future release
+#14 5.989 [INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.561 s -- in cl.duoc.bank.mobile.MobileHomeServiceTest
+#14 6.013 [INFO] 
+#14 6.013 [INFO] Results:
+#14 6.013 [INFO] 
+#14 6.013 [INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+#14 6.013 [INFO] 
+#14 6.021 [INFO] 
+#14 6.021 [INFO] --- jar:3.4.2:jar (default-jar) @ mobile-bff ---
+#14 6.035 [INFO] Building jar: /src/mobile-bff/target/mobile-bff-1.0.0.jar
+#14 6.042 [INFO] 
+#14 6.042 [INFO] --- spring-boot:3.5.16:repackage (repackage) @ mobile-bff ---
+#14 6.152 [INFO] Replacing main artifact /src/mobile-bff/target/mobile-bff-1.0.0.jar with repackaged archive, adding nested dependencies in BOOT-INF/.
+#14 6.152 [INFO] The original artifact has been renamed to /src/mobile-bff/target/mobile-bff-1.0.0.jar.original
+#14 6.152 [INFO] 
+#14 6.152 [INFO] -----------------------< cl.duoc.banco:atm-bff >------------------------
+#14 6.152 [INFO] Building atm-bff 1.0.0                                            [9/11]
+#14 6.153 [INFO]   from atm-bff/pom.xml
+#14 6.153 [INFO] --------------------------------[ jar ]---------------------------------
+#14 6.166 [INFO] 
+#14 6.166 [INFO] --- resources:3.3.1:resources (default-resources) @ atm-bff ---
+#14 6.170 [INFO] Copying 1 resource from src/main/resources to target/classes
+#14 6.171 [INFO] Copying 1 resource from src/main/resources to target/classes
+#14 6.171 [INFO] 
+#14 6.171 [INFO] --- compiler:3.14.1:compile (default-compile) @ atm-bff ---
+#14 6.173 [INFO] Recompiling the module because of changed source code.
+#14 6.174 [INFO] Compiling 6 source files with javac [debug parameters release 21] to target/classes
+#14 6.310 [INFO] 
+#14 6.310 [INFO] --- resources:3.3.1:testResources (default-testResources) @ atm-bff ---
+#14 6.312 [INFO] skip non existing resourceDirectory /src/atm-bff/src/test/resources
+#14 6.312 [INFO] 
+#14 6.312 [INFO] --- compiler:3.14.1:testCompile (default-testCompile) @ atm-bff ---
+#14 6.313 [INFO] Recompiling the module because of changed dependency.
+#14 6.313 [INFO] Compiling 1 source file with javac [debug parameters release 21] to target/test-classes
+#14 6.384 [INFO] 
+#14 6.384 [INFO] --- surefire:3.5.6:test (default-test) @ atm-bff ---
+#14 6.386 [INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+#14 6.388 [INFO] 
+#14 6.388 [INFO] -------------------------------------------------------
+#14 6.388 [INFO]  T E S T S
+#14 6.388 [INFO] -------------------------------------------------------
+#14 6.605 [INFO] Running cl.duoc.bank.atm.AtmServiceTest
+#14 6.710 Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build as described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
+#14 6.801 OpenJDK 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+#14 6.811 WARNING: A Java agent has been loaded dynamically (/root/.m2/repository/net/bytebuddy/byte-buddy-agent/1.17.8/byte-buddy-agent-1.17.8.jar)
+#14 6.811 WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+#14 6.811 WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+#14 6.811 WARNING: Dynamic loading of agents will be disallowed by default in a future release
+#14 6.980 [INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.372 s -- in cl.duoc.bank.atm.AtmServiceTest
+#14 6.999 [INFO] 
+#14 6.999 [INFO] Results:
+#14 6.999 [INFO] 
+#14 6.999 [INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0
+#14 6.999 [INFO] 
+#14 6.999 [INFO] 
+#14 6.999 [INFO] --- jar:3.4.2:jar (default-jar) @ atm-bff ---
+#14 7.002 [INFO] Building jar: /src/atm-bff/target/atm-bff-1.0.0.jar
+#14 7.006 [INFO] 
+#14 7.006 [INFO] --- spring-boot:3.5.16:repackage (repackage) @ atm-bff ---
+#14 7.121 [INFO] Replacing main artifact /src/atm-bff/target/atm-bff-1.0.0.jar with repackaged archive, adding nested dependencies in BOOT-INF/.
+#14 7.121 [INFO] The original artifact has been renamed to /src/atm-bff/target/atm-bff-1.0.0.jar.original
+#14 7.121 [INFO] 
+#14 7.121 [INFO] -----------------< cl.duoc.banco:operaciones-service >------------------
+#14 7.121 [INFO] Building operaciones-service 1.0.0                               [10/11]
+#14 7.121 [INFO]   from operaciones-service/pom.xml
+#14 7.121 [INFO] --------------------------------[ jar ]---------------------------------
+#14 7.186 [INFO] 
+#14 7.186 [INFO] --- resources:3.3.1:resources (default-resources) @ operaciones-service ---
+#14 7.228 [INFO] Copying 1 resource from src/main/resources to target/classes
+#14 7.228 [INFO] Copying 1 resource from src/main/resources to target/classes
+#14 7.229 [INFO] 
+#14 7.229 [INFO] --- compiler:3.14.1:compile (default-compile) @ operaciones-service ---
+#14 7.230 [INFO] Recompiling the module because of changed source code.
+#14 7.230 [INFO] Compiling 6 source files with javac [debug parameters release 21] to target/classes
+#14 7.305 [INFO] 
+#14 7.305 [INFO] --- resources:3.3.1:testResources (default-testResources) @ operaciones-service ---
+#14 7.305 [INFO] skip non existing resourceDirectory /src/operaciones-service/src/test/resources
+#14 7.305 [INFO] 
+#14 7.305 [INFO] --- compiler:3.14.1:testCompile (default-testCompile) @ operaciones-service ---
+#14 7.307 [INFO] Recompiling the module because of changed dependency.
+#14 7.308 [INFO] Compiling 2 source files with javac [debug parameters release 21] to target/test-classes
+#14 7.379 [INFO] 
+#14 7.379 [INFO] --- surefire:3.5.6:test (default-test) @ operaciones-service ---
+#14 7.381 [INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+#14 7.382 [INFO] 
+#14 7.382 [INFO] -------------------------------------------------------
+#14 7.382 [INFO]  T E S T S
+#14 7.382 [INFO] -------------------------------------------------------
+#14 7.603 [INFO] Running cl.duoc.banco.OperationsServiceTest
+#14 7.821 [INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.214 s -- in cl.duoc.banco.OperationsServiceTest
+#14 7.821 [INFO] Running cl.duoc.banco.ResilienceTest
+#14 7.946 [INFO] Tests run: 3, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.126 s -- in cl.duoc.banco.ResilienceTest
+#14 7.955 [INFO] 
+#14 7.955 [INFO] Results:
+#14 7.955 [INFO] 
+#14 7.955 [INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0
+#14 7.955 [INFO] 
+#14 7.956 [INFO] 
+#14 7.956 [INFO] --- jar:3.4.2:jar (default-jar) @ operaciones-service ---
+#14 7.960 [INFO] Building jar: /src/operaciones-service/target/operaciones-service-1.0.0.jar
+#14 7.964 [INFO] 
+#14 7.964 [INFO] --- spring-boot:3.5.16:repackage (repackage) @ operaciones-service ---
+#14 8.051 [INFO] Replacing main artifact /src/operaciones-service/target/operaciones-service-1.0.0.jar with repackaged archive, adding nested dependencies in BOOT-INF/.
+#14 8.051 [INFO] The original artifact has been renamed to /src/operaciones-service/target/operaciones-service-1.0.0.jar.original
+#14 8.051 [INFO] 
+#14 8.051 [INFO] ------------------< cl.duoc.banco:auditoria-service >-------------------
+#14 8.051 [INFO] Building auditoria-service 1.0.0                                 [11/11]
+#14 8.051 [INFO]   from auditoria-service/pom.xml
+#14 8.051 [INFO] --------------------------------[ jar ]---------------------------------
+#14 8.057 [INFO] 
+#14 8.057 [INFO] --- resources:3.3.1:resources (default-resources) @ auditoria-service ---
+#14 8.059 [INFO] Copying 1 resource from src/main/resources to target/classes
+#14 8.059 [INFO] Copying 1 resource from src/main/resources to target/classes
+#14 8.059 [INFO] 
+#14 8.059 [INFO] --- compiler:3.14.1:compile (default-compile) @ auditoria-service ---
+#14 8.061 [INFO] Recompiling the module because of changed source code.
+#14 8.061 [INFO] Compiling 3 source files with javac [debug parameters release 21] to target/classes
+#14 8.116 [INFO] 
+#14 8.116 [INFO] --- resources:3.3.1:testResources (default-testResources) @ auditoria-service ---
+#14 8.116 [INFO] skip non existing resourceDirectory /src/auditoria-service/src/test/resources
+#14 8.116 [INFO] 
+#14 8.116 [INFO] --- compiler:3.14.1:testCompile (default-testCompile) @ auditoria-service ---
+#14 8.117 [INFO] Recompiling the module because of changed dependency.
+#14 8.118 [INFO] Compiling 1 source file with javac [debug parameters release 21] to target/test-classes
+#14 8.189 [INFO] 
+#14 8.189 [INFO] --- surefire:3.5.6:test (default-test) @ auditoria-service ---
+#14 8.191 [INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+#14 8.192 [INFO] 
+#14 8.192 [INFO] -------------------------------------------------------
+#14 8.192 [INFO]  T E S T S
+#14 8.192 [INFO] -------------------------------------------------------
+#14 8.374 [INFO] Running cl.duoc.banco.EventsTest
+#14 8.549 23:20:15.137 [main] INFO cl.duoc.banco.EventsController -- EVENT_CONSUMED eventId=fb69ff24-641f-4741-96a8-85f4f4794362
+#14 8.552 [INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.177 s -- in cl.duoc.banco.EventsTest
+#14 8.562 [INFO] 
+#14 8.562 [INFO] Results:
+#14 8.562 [INFO] 
+#14 8.562 [INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+#14 8.562 [INFO] 
+#14 8.562 [INFO] 
+#14 8.562 [INFO] --- jar:3.4.2:jar (default-jar) @ auditoria-service ---
+#14 8.564 [INFO] Building jar: /src/auditoria-service/target/auditoria-service-1.0.0.jar
+#14 8.565 [INFO] 
+#14 8.566 [INFO] --- spring-boot:3.5.16:repackage (repackage) @ auditoria-service ---
+#14 8.639 [INFO] Replacing main artifact /src/auditoria-service/target/auditoria-service-1.0.0.jar with repackaged archive, adding nested dependencies in BOOT-INF/.
+#14 8.639 [INFO] The original artifact has been renamed to /src/auditoria-service/target/auditoria-service-1.0.0.jar.original
+#14 8.639 [INFO] ------------------------------------------------------------------------
+#14 8.639 [INFO] Reactor Summary for banco-cloud 1.0.0:
+#14 8.639 [INFO] 
+#14 8.639 [INFO] banco-cloud ........................................ SUCCESS [  0.286 s]
+#14 8.639 [INFO] config-server ...................................... SUCCESS [  0.884 s]
+#14 8.639 [INFO] discovery-server ................................... SUCCESS [  0.539 s]
+#14 8.639 [INFO] auth-server ........................................ SUCCESS [  0.246 s]
+#14 8.640 [INFO] account-service .................................... SUCCESS [  0.693 s]
+#14 8.640 [INFO] movement-service ................................... SUCCESS [  0.564 s]
+#14 8.640 [INFO] web-bff ............................................ SUCCESS [  0.827 s]
+#14 8.640 [INFO] mobile-bff ......................................... SUCCESS [  1.392 s]
+#14 8.640 [INFO] atm-bff ............................................ SUCCESS [  0.969 s]
+#14 8.640 [INFO] operaciones-service ................................ SUCCESS [  0.930 s]
+#14 8.640 [INFO] auditoria-service .................................. SUCCESS [  0.588 s]
+#14 8.640 [INFO] ------------------------------------------------------------------------
+#14 8.640 [INFO] BUILD SUCCESS
+#14 8.640 [INFO] ------------------------------------------------------------------------
+#14 8.640 [INFO] Total time:  8.039 s
+#14 8.640 [INFO] Finished at: 2026-10-05T23:20:15Z
+#14 8.640 [INFO] ------------------------------------------------------------------------
+#14 DONE 8.8s
+
+#15 [stage-1 5/5] COPY --from=build /src/config-server/target/config-server-1.0.0.jar app.jar
+#15 DONE 0.0s
+
+#16 exporting to image
+#16 exporting layers
+#16 exporting layers 0.7s done
+#16 exporting manifest sha256:5fc5659dc09542c74830077f1dda8bce9f81d748aaa64eb654d6d442be1100aa
+#16 exporting manifest sha256:5fc5659dc09542c74830077f1dda8bce9f81d748aaa64eb654d6d442be1100aa done
+#16 exporting config sha256:3adfada0b374d0bce8e1e9184183b969da997488af24afe580a782d840d31942 done
+#16 exporting attestation manifest sha256:e137ee9c93f70fac2a0eb6c9a44934f1fc2d86b1e077a6e138bcc461a489c5b2 done
+#16 exporting manifest list sha256:070b389a53ec040ac22a5e127c0ba7030bf7df72b37729a95999f76e05649ba5 done
+#16 naming to docker.io/banco/config-server:1.0.0 done
+#16 unpacking to docker.io/banco/config-server:1.0.0 0.1s done
+#16 DONE 0.8s
+
+#17 resolving provenance for metadata file
+#17 DONE 0.0s
+ Image banco/config-server:1.0.0 Built 

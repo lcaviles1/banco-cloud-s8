@@ -1,0 +1,27 @@
+$ docker compose logs --no-color | filtro de arranque, importación y eventos
+broker-1            | 2026-10-05 23:17:36,614 INFO  [org.apache.activemq.artemis.core.server] AMQ221007: Server is now active
+broker-1            | 2026-10-05 23:17:36,614 INFO  [org.apache.activemq.artemis.core.server] AMQ221001: Apache ActiveMQ Artemis Message Broker version 2.42.0 [0.0.0.0, nodeID=f34714dc-c112-11f1-8ff9-9eb68c4dbc4f] 
+broker-1            | 2026-10-05 23:18:28,652 INFO  [org.apache.activemq.artemis.core.server] AMQ221007: Server is now active
+broker-1            | 2026-10-05 23:18:28,652 INFO  [org.apache.activemq.artemis.core.server] AMQ221001: Apache ActiveMQ Artemis Message Broker version 2.42.0 [0.0.0.0, nodeID=f34714dc-c112-11f1-8ff9-9eb68c4dbc4f] 
+broker-1            | 2026-10-05 23:20:55,465 INFO  [org.apache.activemq.artemis.core.server] AMQ221007: Server is now active
+broker-1            | 2026-10-05 23:20:55,465 INFO  [org.apache.activemq.artemis.core.server] AMQ221001: Apache ActiveMQ Artemis Message Broker version 2.42.0 [0.0.0.0, nodeID=f34714dc-c112-11f1-8ff9-9eb68c4dbc4f] 
+auditoria-service-1  | 2026-10-05T23:17:49.777Z  INFO 1 --- [auditoria-service] [           main] cl.duoc.banco.Application                : Started Application in 4.152 seconds (process running for 4.53)
+discovery-server-1   | 2026-10-05T23:17:37.427Z  INFO 1 --- [discovery-server] [           main] cl.duoc.banco.Application                : Started Application in 2.902 seconds (process running for 3.332)
+auditoria-service-1  | 2026-10-05T23:18:03.667Z  INFO 1 --- [auditoria-service] [ntContainer#0-1] cl.duoc.banco.EventsController           : EVENT_CONSUMED eventId=fd2c8b6a-b024-49da-b5c6-e48d8855d69e
+operaciones-service-1  | 2026-10-05T23:17:56.472Z  INFO 1 --- [operaciones-service] [           main] cl.duoc.banco.Application                : Started Application in 4.998 seconds (process running for 5.547)
+config-server-1        | 2026-10-05T23:20:18.760Z  INFO 1 --- [config-server] [           main] cl.duoc.banco.Application                : Started Application in 1.591 seconds (process running for 1.882)
+operaciones-service-1  | 2026-10-05T23:18:03.622Z  INFO 1 --- [operaciones-service] [   scheduling-1] cl.duoc.banco.OutboxPublisher            : EVENT_PUBLISHED eventId=fd2c8b6a-b024-49da-b5c6-e48d8855d69e
+auth-server-1          | 2026-10-05T23:17:42.051Z  INFO 1 --- [auth-server] [           main] cl.duoc.banco.Application                : Started Application in 2.131 seconds (process running for 2.38)
+operaciones-service-1  | 2026-10-05T23:18:29.838Z  INFO 1 --- [operaciones-service] [   scheduling-1] cl.duoc.banco.OutboxPublisher            : EVENT_PUBLISHED eventId=0395d0e4-d430-42a2-ba5f-e1ead44ab60c
+operaciones-service-1  | 2026-10-05T23:19:35.996Z  INFO 1 --- [operaciones-service] [   scheduling-1] cl.duoc.banco.OutboxPublisher            : EVENT_PUBLISHED eventId=5d3a689d-9339-4fe9-b24f-2420cdb0631a
+auditoria-service-1    | 2026-10-05T23:18:33.526Z  INFO 1 --- [auditoria-service] [ntContainer#0-2] cl.duoc.banco.EventsController           : EVENT_CONSUMED eventId=0395d0e4-d430-42a2-ba5f-e1ead44ab60c
+operaciones-service-1  | 2026-10-05T23:20:26.335Z  INFO 1 --- [operaciones-service] [           main] cl.duoc.banco.Application                : Started Application in 2.844 seconds (process running for 3.069)
+operaciones-service-1  | 2026-10-05T23:20:31.361Z  INFO 1 --- [operaciones-service] [   scheduling-1] cl.duoc.banco.OutboxPublisher            : EVENT_PUBLISHED eventId=153b5f83-2df1-4bb4-8a0b-7a1b6a4821ee
+auditoria-service-1    | 2026-10-05T23:18:37.621Z  INFO 1 --- [auditoria-service] [           main] cl.duoc.banco.Application                : Started Application in 2.139 seconds (process running for 2.395)
+operaciones-service-1  | 2026-10-05T23:20:56.673Z  INFO 1 --- [operaciones-service] [   scheduling-1] cl.duoc.banco.OutboxPublisher            : EVENT_PUBLISHED eventId=d0e2c4e7-e532-4509-9d6e-e3a0b2158c4c
+auditoria-service-1    | 2026-10-05T23:19:36.054Z  INFO 1 --- [auditoria-service] [ntContainer#0-1] cl.duoc.banco.EventsController           : EVENT_CONSUMED eventId=5d3a689d-9339-4fe9-b24f-2420cdb0631a
+auditoria-service-1    | 2026-10-05T23:19:43.496Z  INFO 1 --- [auditoria-service] [           main] cl.duoc.banco.Application                : Started Application in 2.218 seconds (process running for 2.484)
+auditoria-service-1    | 2026-10-05T23:20:26.911Z  INFO 1 --- [auditoria-service] [           main] cl.duoc.banco.Application                : Started Application in 2.893 seconds (process running for 3.178)
+auditoria-service-1    | 2026-10-05T23:20:31.369Z  INFO 1 --- [auditoria-service] [ntContainer#0-1] cl.duoc.banco.EventsController           : EVENT_CONSUMED eventId=153b5f83-2df1-4bb4-8a0b-7a1b6a4821ee
+auditoria-service-1    | 2026-10-05T23:21:00.160Z  INFO 1 --- [auditoria-service] [ntContainer#0-2] cl.duoc.banco.EventsController           : EVENT_CONSUMED eventId=d0e2c4e7-e532-4509-9d6e-e3a0b2158c4c
+auditoria-service-1    | 2026-10-05T23:21:04.718Z  INFO 1 --- [auditoria-service] [           main] cl.duoc.banco.Application                : Started Application in 2.474 seconds (process running for 2.729)

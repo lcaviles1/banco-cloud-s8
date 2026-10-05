@@ -1,0 +1,361 @@
+name: banco-exp3-s8
+x-app:
+  restart: unless-stopped
+  mem_limit: 640m
+  networks: &id001
+  - banco
+  healthcheck: &id002
+    test:
+    - CMD-SHELL
+    - curl -fsS http://localhost:$$SERVER_PORT/actuator/health >/dev/null
+    interval: 10s
+    timeout: 5s
+    retries: 20
+    start_period: 60s
+x-env:
+  INFRA_PASSWORD: ${INFRA_PASSWORD:?Ejecute python3 scripts/configurar.py}
+  OAUTH_ISSUER: ${OAUTH_ISSUER:-http://localhost:9000}
+  DB_PASSWORD: ${DB_PASSWORD:?Falta DB_PASSWORD}
+  BROKER_PASSWORD: ${BROKER_PASSWORD:?Falta BROKER_PASSWORD}
+services:
+  config-server:
+    restart: unless-stopped
+    mem_limit: 640m
+    networks: *id001
+    healthcheck: *id002
+    build:
+      context: .
+      args:
+        MODULE: config-server
+    image: banco/config-server:1.0.0
+    environment:
+      INFRA_PASSWORD: ${INFRA_PASSWORD}
+      SERVER_PORT: 8888
+    ports:
+    - 127.0.0.1:8888:8888
+  discovery-server:
+    restart: unless-stopped
+    mem_limit: 640m
+    networks: *id001
+    healthcheck: *id002
+    build:
+      context: .
+      args:
+        MODULE: discovery-server
+    image: banco/discovery-server:1.0.0
+    environment:
+      INFRA_PASSWORD: ${INFRA_PASSWORD}
+      SERVER_PORT: 8761
+    ports:
+    - 127.0.0.1:8761:8761
+  auth-server:
+    restart: unless-stopped
+    mem_limit: 640m
+    networks: *id001
+    healthcheck: *id002
+    build:
+      context: .
+      args:
+        MODULE: auth-server
+    image: banco/auth-server:1.0.0
+    environment:
+      INFRA_PASSWORD: ${INFRA_PASSWORD:?Ejecute python3 scripts/configurar.py}
+      OAUTH_ISSUER: ${OAUTH_ISSUER:-http://localhost:9000}
+      DB_PASSWORD: ${DB_PASSWORD:?Falta DB_PASSWORD}
+      BROKER_PASSWORD: ${BROKER_PASSWORD:?Falta BROKER_PASSWORD}
+      SERVER_PORT: 9000
+      BANK_CLIENT_SECRET: ${BANK_CLIENT_SECRET:?Falta BANK_CLIENT_SECRET}
+      READER_CLIENT_SECRET: ${READER_CLIENT_SECRET:?Falta READER_CLIENT_SECRET}
+      BFF_CLIENT_SECRET: ${BFF_CLIENT_SECRET}
+    volumes:
+    - auth-data:/data
+    ports:
+    - 127.0.0.1:9000:9000
+    depends_on:
+      config-server:
+        condition: service_healthy
+      discovery-server:
+        condition: service_healthy
+  broker:
+    image: apache/activemq-artemis:2.42.0-alpine
+    restart: unless-stopped
+    mem_limit: 512m
+    networks:
+    - banco
+    environment:
+      ARTEMIS_USER: bank
+      ARTEMIS_PASSWORD: ${BROKER_PASSWORD}
+      ANONYMOUS_LOGIN: 'false'
+    volumes:
+    - broker-data:/var/lib/artemis-instance
+    healthcheck:
+      test:
+      - CMD-SHELL
+      - /var/lib/artemis-instance/bin/artemis check node --url tcp://localhost:61616
+        --user bank --password "$$ARTEMIS_PASSWORD" >/dev/null 2>&1
+      interval: 15s
+      timeout: 10s
+      retries: 15
+      start_period: 30s
+  operaciones-service:
+    restart: unless-stopped
+    mem_limit: 640m
+    networks: *id001
+    healthcheck: *id002
+    build:
+      context: .
+      args:
+        MODULE: operaciones-service
+    image: banco/operaciones-service:1.0.0
+    environment:
+      INFRA_PASSWORD: ${INFRA_PASSWORD:?Ejecute python3 scripts/configurar.py}
+      OAUTH_ISSUER: ${OAUTH_ISSUER:-http://localhost:9000}
+      DB_PASSWORD: ${DB_PASSWORD:?Falta DB_PASSWORD}
+      BROKER_PASSWORD: ${BROKER_PASSWORD:?Falta BROKER_PASSWORD}
+      SERVER_PORT: 8082
+    volumes:
+    - operaciones-data:/data
+    ports:
+    - 127.0.0.1:8082:8082
+    depends_on:
+      config-server:
+        condition: service_healthy
+      discovery-server:
+        condition: service_healthy
+      auth-server:
+        condition: service_healthy
+      broker:
+        condition: service_healthy
+      account-service:
+        condition: service_healthy
+  auditoria-service:
+    restart: unless-stopped
+    mem_limit: 640m
+    networks: *id001
+    healthcheck: *id002
+    build:
+      context: .
+      args:
+        MODULE: auditoria-service
+    image: banco/auditoria-service:1.0.0
+    environment:
+      INFRA_PASSWORD: ${INFRA_PASSWORD:?Ejecute python3 scripts/configurar.py}
+      OAUTH_ISSUER: ${OAUTH_ISSUER:-http://localhost:9000}
+      DB_PASSWORD: ${DB_PASSWORD:?Falta DB_PASSWORD}
+      BROKER_PASSWORD: ${BROKER_PASSWORD:?Falta BROKER_PASSWORD}
+      SERVER_PORT: 8083
+    volumes:
+    - auditoria-data:/data
+    ports:
+    - 127.0.0.1:8083:8083
+    depends_on:
+      config-server:
+        condition: service_healthy
+      discovery-server:
+        condition: service_healthy
+      auth-server:
+        condition: service_healthy
+      broker:
+        condition: service_healthy
+  account-service:
+    restart: unless-stopped
+    mem_limit: 512m
+    networks:
+    - banco
+    healthcheck:
+      test:
+      - CMD-SHELL
+      - curl -fsS http://localhost:$$SERVER_PORT/actuator/health >/dev/null
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 60s
+    build:
+      context: .
+      args:
+        MODULE: account-service
+    image: banco/account-service:1.0.0
+    environment:
+      INFRA_PASSWORD: ${INFRA_PASSWORD:?Ejecute python3 scripts/configurar.py}
+      OAUTH_ISSUER: ${OAUTH_ISSUER:-http://localhost:9000}
+      DB_PASSWORD: ${DB_PASSWORD:?Falta DB_PASSWORD}
+      BROKER_PASSWORD: ${BROKER_PASSWORD:?Falta BROKER_PASSWORD}
+      SERVER_PORT: 8081
+    volumes: []
+    ports:
+    - 127.0.0.1:8081:8081
+    depends_on:
+      config-server:
+        condition: service_healthy
+      discovery-server:
+        condition: service_healthy
+      auth-server:
+        condition: service_healthy
+  movement-service:
+    restart: unless-stopped
+    mem_limit: 512m
+    networks:
+    - banco
+    healthcheck:
+      test:
+      - CMD-SHELL
+      - curl -fsS http://localhost:$$SERVER_PORT/actuator/health >/dev/null
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 60s
+    build:
+      context: .
+      args:
+        MODULE: movement-service
+    image: banco/movement-service:1.0.0
+    environment:
+      INFRA_PASSWORD: ${INFRA_PASSWORD:?Ejecute python3 scripts/configurar.py}
+      OAUTH_ISSUER: ${OAUTH_ISSUER:-http://localhost:9000}
+      DB_PASSWORD: ${DB_PASSWORD:?Falta DB_PASSWORD}
+      BROKER_PASSWORD: ${BROKER_PASSWORD:?Falta BROKER_PASSWORD}
+      SERVER_PORT: 8084
+    volumes: []
+    ports:
+    - 127.0.0.1:8084:8084
+    depends_on:
+      config-server:
+        condition: service_healthy
+      discovery-server:
+        condition: service_healthy
+      auth-server:
+        condition: service_healthy
+  web-bff:
+    restart: unless-stopped
+    mem_limit: 512m
+    networks:
+    - banco
+    healthcheck:
+      test:
+      - CMD-SHELL
+      - curl -fsS http://localhost:$$SERVER_PORT/actuator/health >/dev/null
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 60s
+    build:
+      context: .
+      args:
+        MODULE: web-bff
+    image: banco/web-bff:1.0.0
+    environment:
+      INFRA_PASSWORD: ${INFRA_PASSWORD:?Ejecute python3 scripts/configurar.py}
+      OAUTH_ISSUER: ${OAUTH_ISSUER:-http://localhost:9000}
+      DB_PASSWORD: ${DB_PASSWORD:?Falta DB_PASSWORD}
+      BROKER_PASSWORD: ${BROKER_PASSWORD:?Falta BROKER_PASSWORD}
+      SERVER_PORT: 8091
+      ACCOUNT_SERVICE_URL: http://account-service:8081
+      MOVEMENT_SERVICE_URL: http://movement-service:8084
+      BFF_CLIENT_SECRET: ${BFF_CLIENT_SECRET}
+      BFF_OAUTH_SCOPE: cuentas.read movimientos.read
+    volumes: []
+    ports:
+    - 127.0.0.1:8091:8091
+    depends_on:
+      config-server:
+        condition: service_healthy
+      discovery-server:
+        condition: service_healthy
+      auth-server:
+        condition: service_healthy
+      account-service:
+        condition: service_healthy
+      movement-service:
+        condition: service_healthy
+  mobile-bff:
+    restart: unless-stopped
+    mem_limit: 512m
+    networks:
+    - banco
+    healthcheck:
+      test:
+      - CMD-SHELL
+      - curl -fsS http://localhost:$$SERVER_PORT/actuator/health >/dev/null
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 60s
+    build:
+      context: .
+      args:
+        MODULE: mobile-bff
+    image: banco/mobile-bff:1.0.0
+    environment:
+      INFRA_PASSWORD: ${INFRA_PASSWORD:?Ejecute python3 scripts/configurar.py}
+      OAUTH_ISSUER: ${OAUTH_ISSUER:-http://localhost:9000}
+      DB_PASSWORD: ${DB_PASSWORD:?Falta DB_PASSWORD}
+      BROKER_PASSWORD: ${BROKER_PASSWORD:?Falta BROKER_PASSWORD}
+      SERVER_PORT: 8092
+      ACCOUNT_SERVICE_URL: http://account-service:8081
+      MOVEMENT_SERVICE_URL: http://movement-service:8084
+      BFF_CLIENT_SECRET: ${BFF_CLIENT_SECRET}
+      BFF_OAUTH_SCOPE: cuentas.read movimientos.read
+    volumes: []
+    ports:
+    - 127.0.0.1:8092:8092
+    depends_on:
+      config-server:
+        condition: service_healthy
+      discovery-server:
+        condition: service_healthy
+      auth-server:
+        condition: service_healthy
+      account-service:
+        condition: service_healthy
+      movement-service:
+        condition: service_healthy
+  atm-bff:
+    restart: unless-stopped
+    mem_limit: 512m
+    networks:
+    - banco
+    healthcheck:
+      test:
+      - CMD-SHELL
+      - curl -fsS http://localhost:$$SERVER_PORT/actuator/health >/dev/null
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 60s
+    build:
+      context: .
+      args:
+        MODULE: atm-bff
+    image: banco/atm-bff:1.0.0
+    environment:
+      INFRA_PASSWORD: ${INFRA_PASSWORD:?Ejecute python3 scripts/configurar.py}
+      OAUTH_ISSUER: ${OAUTH_ISSUER:-http://localhost:9000}
+      DB_PASSWORD: ${DB_PASSWORD:?Falta DB_PASSWORD}
+      BROKER_PASSWORD: ${BROKER_PASSWORD:?Falta BROKER_PASSWORD}
+      SERVER_PORT: 8093
+      ACCOUNT_SERVICE_URL: http://account-service:8081
+      MOVEMENT_SERVICE_URL: http://movement-service:8084
+      BFF_CLIENT_SECRET: ${BFF_CLIENT_SECRET}
+      BFF_OAUTH_SCOPE: cuentas.read movimientos.read cuentas.write
+      ATM_PIN: ${ATM_PIN}
+    volumes: []
+    ports:
+    - 127.0.0.1:8093:8093
+    depends_on:
+      config-server:
+        condition: service_healthy
+      discovery-server:
+        condition: service_healthy
+      auth-server:
+        condition: service_healthy
+      account-service:
+        condition: service_healthy
+      movement-service:
+        condition: service_healthy
+networks:
+  banco: null
+volumes:
+  auth-data: null
+  broker-data: null
+  operaciones-data: null
+  auditoria-data: null
