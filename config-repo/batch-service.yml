@@ -1,0 +1,11 @@
+spring:
+  batch:
+    job:
+      enabled: false
+    jdbc:
+      initialize-schema: always
+bank:
+  batch:
+    data: /app/data
+    runtime: /app/runtime
+    workers: ${BATCH_WORKERS:4}

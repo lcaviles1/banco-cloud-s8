@@ -1,0 +1,4 @@
+fila,motivo,original
+"3","INVALID_AMOUNT","3,2024-01-03,-200,debito       "
+"4","MISSING_OR_INVALID_AMOUNT","4,2024-01-03,,debito           "
+"10","INVALID_TYPE","10,2024-01-08,1000,invalido    "

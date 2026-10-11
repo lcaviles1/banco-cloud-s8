@@ -1,0 +1,75 @@
+{
+  "runKey": "daily-semana_3-2024-a9827f929b3c",
+  "status": "COMPLETED",
+  "steps": [
+    {
+      "step": "prepare-daily",
+      "rollbacks": 0,
+      "status": "COMPLETED",
+      "written": 0,
+      "read": 0
+    },
+    {
+      "step": "parallel-legacy",
+      "rollbacks": 0,
+      "status": "COMPLETED",
+      "written": 1000,
+      "read": 1000
+    },
+    {
+      "step": "validate-transform-write:p2",
+      "rollbacks": 0,
+      "status": "COMPLETED",
+      "written": 250,
+      "read": 250
+    },
+    {
+      "step": "validate-transform-write:p0",
+      "rollbacks": 0,
+      "status": "COMPLETED",
+      "written": 250,
+      "read": 250
+    },
+    {
+      "step": "validate-transform-write:p3",
+      "rollbacks": 0,
+      "status": "COMPLETED",
+      "written": 250,
+      "read": 250
+    },
+    {
+      "step": "validate-transform-write:p1",
+      "rollbacks": 0,
+      "status": "COMPLETED",
+      "written": 250,
+      "read": 250
+    },
+    {
+      "step": "export-daily",
+      "rollbacks": 0,
+      "status": "COMPLETED",
+      "written": 0,
+      "read": 0
+    }
+  ],
+  "history": [
+    {
+      "execution_id": 28,
+      "run_key": "daily-semana_3-2024-a9827f929b3c",
+      "retries": 0,
+      "stopped": false,
+      "next_attempt": "2026-10-11T21:52:18.540+00:00"
+    }
+  ],
+  "records": [
+    {
+      "status": "REJECTED",
+      "count": 608
+    },
+    {
+      "status": "VALID",
+      "count": 392
+    }
+  ],
+  "executionId": 28
+}

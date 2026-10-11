@@ -1,0 +1,75 @@
+{
+  "runKey": "annual-semana_3-2024-359979008ba8",
+  "status": "COMPLETED",
+  "steps": [
+    {
+      "step": "prepare-annual",
+      "rollbacks": 0,
+      "status": "COMPLETED",
+      "written": 0,
+      "read": 0
+    },
+    {
+      "step": "parallel-legacy",
+      "rollbacks": 0,
+      "status": "COMPLETED",
+      "written": 1000,
+      "read": 1000
+    },
+    {
+      "step": "validate-transform-write:p0",
+      "rollbacks": 0,
+      "status": "COMPLETED",
+      "written": 250,
+      "read": 250
+    },
+    {
+      "step": "validate-transform-write:p2",
+      "rollbacks": 0,
+      "status": "COMPLETED",
+      "written": 250,
+      "read": 250
+    },
+    {
+      "step": "validate-transform-write:p1",
+      "rollbacks": 0,
+      "status": "COMPLETED",
+      "written": 250,
+      "read": 250
+    },
+    {
+      "step": "validate-transform-write:p3",
+      "rollbacks": 0,
+      "status": "COMPLETED",
+      "written": 250,
+      "read": 250
+    },
+    {
+      "step": "export-annual",
+      "rollbacks": 0,
+      "status": "COMPLETED",
+      "written": 0,
+      "read": 0
+    }
+  ],
+  "history": [
+    {
+      "execution_id": 30,
+      "run_key": "annual-semana_3-2024-359979008ba8",
+      "retries": 0,
+      "stopped": false,
+      "next_attempt": "2026-10-11T21:52:20.629+00:00"
+    }
+  ],
+  "records": [
+    {
+      "status": "REJECTED",
+      "count": 374
+    },
+    {
+      "status": "VALID",
+      "count": 626
+    }
+  ],
+  "executionId": 30
+}

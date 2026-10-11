@@ -1,0 +1,12 @@
+{$BANK_DOMAIN} {
+ @web path /api/web/*
+ reverse_proxy @web bff-web:8080
+ @mobile path /api/mobile/*
+ reverse_proxy @mobile bff-mobile:8080
+ @atm path /api/atm/*
+ reverse_proxy @atm bff-atm:8080
+ @oauth path /oauth2/* /.well-known/*
+ reverse_proxy @oauth auth-server:9000
+ respond /health "UP" 200
+ header Strict-Transport-Security "max-age=31536000; includeSubDomains"
+}

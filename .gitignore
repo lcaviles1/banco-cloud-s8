@@ -1,10 +1,11 @@
-**/target/
+target/
 .env
-.env.*
-!.env.example
 *.log
-*.jwk
-*.mv.db
-*.trace.db
+runtime/
+certs/
+.terraform/
+*.tfstate*
 .DS_Store
+
 __pycache__/
+*.pyc

@@ -1,0 +1,9 @@
+row_no,entity,value_date,type,value,description
+"1","101","2024-01-01","deposito","1000.00","Ingreso mensual"
+"2","101","2024-03-15","retiro","-500.00","Retiro parcial"
+"3","102","2024-05-22","deposito","1500.00","Ingreso mensual"
+"4","103","2024-07-10","deposito","2000.00","Ingreso mensual"
+"5","104","2024-09-05","compra","-100.00","Compra en tienda"
+"6","105","2024-10-01","deposito","2500.00","Ingreso extra"
+"7","106","2024-11-20","deposito","3000.00","Ingreso mensual"
+"9","108","2024-12-31","deposito","2000.00","Ingreso de fin de año"

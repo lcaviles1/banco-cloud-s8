@@ -1,0 +1,71 @@
+{
+  "runKey": "interest-semana_3-2024-01-b8d78bff7b14",
+  "status": "COMPLETED",
+  "steps": [
+    {
+      "step": "prepare-interest",
+      "rollbacks": 0,
+      "status": "COMPLETED",
+      "written": 0,
+      "read": 0
+    },
+    {
+      "step": "parallel-legacy",
+      "rollbacks": 0,
+      "status": "COMPLETED",
+      "written": 1000,
+      "read": 1000
+    },
+    {
+      "step": "validate-transform-write:p2",
+      "rollbacks": 0,
+      "status": "COMPLETED",
+      "written": 250,
+      "read": 250
+    },
+    {
+      "step": "validate-transform-write:p1",
+      "rollbacks": 0,
+      "status": "COMPLETED",
+      "written": 250,
+      "read": 250
+    },
+    {
+      "step": "validate-transform-write:p0",
+      "rollbacks": 0,
+      "status": "COMPLETED",
+      "written": 250,
+      "read": 250
+    },
+    {
+      "step": "validate-transform-write:p3",
+      "rollbacks": 0,
+      "status": "COMPLETED",
+      "written": 250,
+      "read": 250
+    },
+    {
+      "step": "export-interest",
+      "rollbacks": 0,
+      "status": "COMPLETED",
+      "written": 0,
+      "read": 0
+    }
+  ],
+  "history": [
+    {
+      "execution_id": 29,
+      "run_key": "interest-semana_3-2024-01-b8d78bff7b14",
+      "retries": 0,
+      "stopped": false,
+      "next_attempt": "2026-10-11T21:52:19.579+00:00"
+    }
+  ],
+  "records": [
+    {
+      "status": "REJECTED",
+      "count": 1000
+    }
+  ],
+  "executionId": 29
+}

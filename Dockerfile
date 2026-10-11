@@ -1,14 +1,16 @@
-# Una imagen independiente por modulo; la compilacion se comparte por cache.
-FROM maven:3.9.11-eclipse-temurin-21 AS build
-WORKDIR /src
+FROM maven:3.9.9-eclipse-temurin-21 AS build
+WORKDIR /build
 COPY . .
-RUN --mount=type=cache,target=/root/.m2 mvn -B -ntp verify
-FROM eclipse-temurin:21-jre-alpine
-RUN apk add --no-cache curl && addgroup -S bank && adduser -S -G bank bank && mkdir /data && chown bank:bank /data
+RUN mvn -B -q package -DskipTests
+FROM eclipse-temurin:21-jre
+RUN apt-get update && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/* && useradd --system --uid 10001 bank
 WORKDIR /app
-COPY config-repo /config-repo
 ARG MODULE
-COPY --from=build /src/${MODULE}/target/${MODULE}-1.0.0.jar app.jar
-USER bank
-ENV JAVA_TOOL_OPTIONS="-XX:MaxRAMPercentage=70 -XX:+ExitOnOutOfMemoryError"
-ENTRYPOINT ["java","-jar","/app/app.jar"]
+COPY --from=build /build/${MODULE}/target/${MODULE}-1.0.0.jar app.jar
+COPY config-repo /app/config-repo
+COPY data /app/data
+RUN mkdir -p /app/runtime && chown bank:bank /app/runtime
+USER 10001
+EXPOSE 8080
+ENV JAVA_TOOL_OPTIONS="-XX:MaxRAMPercentage=65 -XX:+ExitOnOutOfMemoryError"
+ENTRYPOINT ["java","-jar","app.jar"]

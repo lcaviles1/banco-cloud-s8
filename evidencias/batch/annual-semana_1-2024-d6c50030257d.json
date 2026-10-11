@@ -1,0 +1,89 @@
+{
+  "status": "COMPLETED",
+  "runKey": "annual-semana_1-2024-d6c50030257d",
+  "executionId": 21,
+  "records": [
+    {
+      "status": "REJECTED",
+      "count": 1
+    },
+    {
+      "status": "VALID",
+      "count": 8
+    }
+  ],
+  "history": [
+    {
+      "execution_id": 19,
+      "run_key": "annual-semana_1-2024-d6c50030257d",
+      "retries": 0,
+      "stopped": true,
+      "next_attempt": "2026-10-11T21:41:43.709+00:00"
+    },
+    {
+      "execution_id": 20,
+      "run_key": "annual-semana_1-2024-d6c50030257d",
+      "retries": 1,
+      "stopped": true,
+      "next_attempt": "2026-10-11T21:42:22.273+00:00"
+    },
+    {
+      "execution_id": 21,
+      "run_key": "annual-semana_1-2024-d6c50030257d",
+      "retries": 2,
+      "stopped": false,
+      "next_attempt": "2026-10-11T21:42:52.324+00:00"
+    }
+  ],
+  "steps": [
+    {
+      "rollbacks": 0,
+      "step": "prepare-annual",
+      "read": 0,
+      "written": 0,
+      "status": "COMPLETED"
+    },
+    {
+      "rollbacks": 0,
+      "step": "parallel-legacy",
+      "read": 9,
+      "written": 9,
+      "status": "COMPLETED"
+    },
+    {
+      "rollbacks": 0,
+      "step": "validate-transform-write:p2",
+      "read": 2,
+      "written": 2,
+      "status": "COMPLETED"
+    },
+    {
+      "rollbacks": 0,
+      "step": "validate-transform-write:p3",
+      "read": 2,
+      "written": 2,
+      "status": "COMPLETED"
+    },
+    {
+      "rollbacks": 0,
+      "step": "validate-transform-write:p1",
+      "read": 2,
+      "written": 2,
+      "status": "COMPLETED"
+    },
+    {
+      "rollbacks": 0,
+      "step": "validate-transform-write:p0",
+      "read": 3,
+      "written": 3,
+      "status": "COMPLETED"
+    },
+    {
+      "rollbacks": 0,
+      "step": "export-annual",
+      "read": 0,
+      "written": 0,
+      "status": "COMPLETED"
+    }
+  ]
+}

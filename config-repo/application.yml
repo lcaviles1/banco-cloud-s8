@@ -1,0 +1,67 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://postgres:5432/${DB_NAME}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+    hikari:
+      maximum-pool-size: 12
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:outbox.sql,classpath:schema.sql
+  kafka:
+    bootstrap-servers: kafka:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      acks: all
+      properties:
+        enable.idempotence: true
+        max.block.ms: 5000
+        delivery.timeout.ms: 10000
+        request.timeout.ms: 5000
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      auto-offset-reset: earliest
+      enable-auto-commit: false
+    listener:
+      ack-mode: record
+  artemis:
+    mode: native
+    broker-url: tcp://artemis:61616
+    user: ${BROKER_USER}
+    password: ${BROKER_PASSWORD}
+  jms:
+    listener:
+      session-transacted: true
+bank:
+  issuer: ${OAUTH_ISSUER:http://localhost:9000}
+  jwks: http://auth-server:9000/oauth2/jwks
+  messaging:
+    enabled: false
+eureka:
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${random.uuid}
+  client:
+    service-url:
+      defaultZone: http://${EUREKA_USER}:${EUREKA_PASSWORD}@discovery-server:8761/eureka/
+    registry-fetch-interval-seconds: 5
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: when_authorized
+server:
+  shutdown: graceful
+  error:
+    include-message: always
+logging:
+  pattern:
+    level: "%5p [${spring.application.name}]"

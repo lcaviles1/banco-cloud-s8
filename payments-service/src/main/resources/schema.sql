@@ -1,0 +1,2 @@
+CREATE TABLE IF NOT EXISTS payments(id varchar(36) primary key,request_key varchar(80) not null,owner varchar(40) not null,type varchar(12) not null,source bigint not null,destination bigint,amount numeric(16,2) not null check(amount>0),fingerprint text not null,status varchar(12) not null,reason varchar(80),attempts int not null default 0,next_attempt timestamp not null default current_timestamp,created timestamp not null default current_timestamp,unique(owner,request_key));
+CREATE INDEX IF NOT EXISTS payment_pending ON payments(status,next_attempt);

@@ -1,0 +1,226 @@
+{
+  "channel": "web",
+  "payments": {
+    "payments": [
+      {
+        "id": "c1198703-5d9b-43e7-874e-5c01bed7deff",
+        "type": "WITHDRAWAL",
+        "source": 101,
+        "destination": null,
+        "amount": 100.0,
+        "status": "COMPLETED",
+        "reason": null
+      },
+      {
+        "id": "2760f7e0-0525-4f76-85f2-9bd8da6f73f2",
+        "type": "DEPOSIT",
+        "source": 101,
+        "destination": null,
+        "amount": 10000.0,
+        "status": "COMPLETED",
+        "reason": null
+      },
+      {
+        "id": "b468b0d3-3cca-4fa9-9d61-d79266263b36",
+        "type": "TRANSFER",
+        "source": 101,
+        "destination": 102,
+        "amount": 10.0,
+        "status": "COMPLETED",
+        "reason": null
+      },
+      {
+        "id": "c2c43764-2bd5-4438-ad6f-9787a31aa600",
+        "type": "TRANSFER",
+        "source": 101,
+        "destination": 102,
+        "amount": 1.0,
+        "status": "COMPLETED",
+        "reason": null
+      },
+      {
+        "id": "f7e2cb5c-53b3-4784-be4b-b26b3986ad3b",
+        "type": "TRANSFER",
+        "source": 101,
+        "destination": 102,
+        "amount": 1.0,
+        "status": "COMPLETED",
+        "reason": null
+      },
+      {
+        "id": "27846ea6-dd23-41d0-b2e8-92bd7a038177",
+        "type": "TRANSFER",
+        "source": 101,
+        "destination": 102,
+        "amount": 1.0,
+        "status": "COMPLETED",
+        "reason": null
+      },
+      {
+        "id": "7f03bcf6-adae-43ab-bec6-79128837636b",
+        "type": "TRANSFER",
+        "source": 101,
+        "destination": 102,
+        "amount": 1.0,
+        "status": "COMPLETED",
+        "reason": null
+      },
+      {
+        "id": "9ac4b3d9-62c4-47f0-8cbd-d465714f5c46",
+        "type": "TRANSFER",
+        "source": 101,
+        "destination": 102,
+        "amount": 1.0,
+        "status": "COMPLETED",
+        "reason": null
+      },
+      {
+        "id": "79bc3854-de57-4107-8b75-0504cc529434",
+        "type": "TRANSFER",
+        "source": 101,
+        "destination": 102,
+        "amount": 1.0,
+        "status": "COMPLETED",
+        "reason": null
+      },
+      {
+        "id": "18ccc422-46b3-431c-b69f-994085904405",
+        "type": "TRANSFER",
+        "source": 101,
+        "destination": 102,
+        "amount": 1.0,
+        "status": "COMPLETED",
+        "reason": null
+      },
+      {
+        "id": "020bbfe5-e894-4b7a-a3e9-76f669377e1a",
+        "type": "TRANSFER",
+        "source": 101,
+        "destination": 102,
+        "amount": 1.0,
+        "status": "COMPLETED",
+        "reason": null
+      },
+      {
+        "id": "bbd49dfa-7100-4aa8-a9c3-43be37384128",
+        "type": "TRANSFER",
+        "source": 101,
+        "destination": 102,
+        "amount": 1.0,
+        "status": "COMPLETED",
+        "reason": null
+      },
+      {
+        "id": "59bd21ee-0c4d-4522-afa8-7ae57674c4fd",
+        "type": "TRANSFER",
+        "source": 101,
+        "destination": 102,
+        "amount": 1.0,
+        "status": "COMPLETED",
+        "reason": null
+      },
+      {
+        "id": "07c8ab37-11ca-4c7e-846c-a42ada3648c6",
+        "type": "TRANSFER",
+        "source": 101,
+        "destination": 102,
+        "amount": 1.0,
+        "status": "COMPLETED",
+        "reason": null
+      },
+      {
+        "id": "3e03ea5c-aaff-44e5-8199-a963f98f1b89",
+        "type": "TRANSFER",
+        "source": 101,
+        "destination": 102,
+        "amount": 1.0,
+        "status": "COMPLETED",
+        "reason": null
+      },
+      {
+        "id": "a8b44d1d-5ed0-4cd2-bcfa-0b8cf02016a4",
+        "type": "TRANSFER",
+        "source": 101,
+        "destination": 102,
+        "amount": 1.0,
+        "status": "COMPLETED",
+        "reason": null
+      },
+      {
+        "id": "4abb6c7e-a77d-46de-91a1-6dd404446c08",
+        "type": "TRANSFER",
+        "source": 101,
+        "destination": 102,
+        "amount": 1.0,
+        "status": "COMPLETED",
+        "reason": null
+      },
+      {
+        "id": "ed8e9136-62ca-4a5f-a16c-c7c04351c982",
+        "type": "TRANSFER",
+        "source": 101,
+        "destination": 102,
+        "amount": 1.0,
+        "status": "COMPLETED",
+        "reason": null
+      },
+      {
+        "id": "f24940db-989c-4c2d-87ab-9d565841d1f3",
+        "type": "TRANSFER",
+        "source": 101,
+        "destination": 102,
+        "amount": 1.0,
+        "status": "COMPLETED",
+        "reason": null
+      },
+      {
+        "id": "3b29c375-b020-4872-afe2-c9d25627f75d",
+        "type": "TRANSFER",
+        "source": 101,
+        "destination": 102,
+        "amount": 1.0,
+        "status": "COMPLETED",
+        "reason": null
+      }
+    ]
+  },
+  "accounts": {
+    "accounts": [
+      {
+        "id": 101,
+        "owner": "C001",
+        "type": "SAVINGS",
+        "balance": 34649.0,
+        "status": "OPEN"
+      },
+      {
+        "id": 201,
+        "owner": "C001",
+        "type": "LOAN",
+        "balance": 0.0,
+        "status": "CLOSED"
+      },
+      {
+        "id": 202,
+        "owner": "C001",
+        "type": "LOAN",
+        "balance": 0.0,
+        "status": "CLOSED"
+      },
+      {
+        "id": 203,
+        "owner": "C001",
+        "type": "LOAN",
+        "balance": 0.0,
+        "status": "CLOSED"
+      }
+    ]
+  },
+  "generatedAt": "2026-10-11T21:53:36.284612295Z",
+  "customer": {
+    "id": "C001",
+    "name": "Lucas Avilés",
+    "email": "lucas@example.test",
+    "status": "ACTIVE"
+  }
+}

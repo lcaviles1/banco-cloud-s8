@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: accounts-service
+  config:
+    import: "configserver:${CONFIG_URL:http://config-server:8888}"
+  cloud:
+    config:
+      username: ${CONFIG_USER:config}
+      password: ${CONFIG_PASSWORD}
+      fail-fast: true
+server:
+  port: 8080

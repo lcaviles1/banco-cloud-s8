@@ -1,0 +1,17 @@
+bank:
+  messaging:
+    enabled: true
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          payments-worker:
+            provider: bank
+            client-id: payments-worker
+            client-secret: ${PAYMENTS_WORKER_SECRET}
+            authorization-grant-type: client_credentials
+            scope: accounts.post
+        provider:
+          bank:
+            token-uri: http://auth-server:9000/oauth2/token

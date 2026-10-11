@@ -1,0 +1,8 @@
+spring:
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+bank:
+  channel: web
+  atm:
+    pin-hash: ${ATM_PIN_HASH}

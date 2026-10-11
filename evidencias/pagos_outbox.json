@@ -1,0 +1,13 @@
+{
+  "outbox": {
+    "pending": 0,
+    "sent": 36
+  },
+  "resilience": [
+    {
+      "service": "accounts-service",
+      "state": "CLOSED",
+      "failures": 0
+    }
+  ]
+}

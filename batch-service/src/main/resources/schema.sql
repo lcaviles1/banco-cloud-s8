@@ -1,0 +1,3 @@
+CREATE TABLE IF NOT EXISTS batch_records(run_key varchar(120) not null,row_no bigint not null,status varchar(12) not null,reason varchar(100),entity varchar(100),value_date varchar(12),type varchar(30),value numeric(20,2),description text,raw text,primary key(run_key,row_no));
+CREATE TABLE IF NOT EXISTS batch_keys(run_key varchar(120) not null,natural_key varchar(100) not null,occurrences int not null,primary key(run_key,natural_key));
+CREATE TABLE IF NOT EXISTS batch_runs(execution_id bigint primary key,run_key varchar(120) not null,retries int not null,stopped boolean not null default false,next_attempt timestamp not null default current_timestamp);

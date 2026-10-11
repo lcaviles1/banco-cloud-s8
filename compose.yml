@@ -1,0 +1,648 @@
+{
+  "name": "banco-eft-s9",
+  "services": {
+    "postgres": {
+      "image": "postgres:16.10",
+      "environment": {
+        "POSTGRES_USER": "postgres",
+        "POSTGRES_PASSWORD": "${POSTGRES_PASSWORD}",
+        "DB_ACCOUNTS_PASSWORD": "${DB_ACCOUNTS_PASSWORD}",
+        "DB_PAYMENTS_PASSWORD": "${DB_PAYMENTS_PASSWORD}",
+        "DB_CUSTOMERS_PASSWORD": "${DB_CUSTOMERS_PASSWORD}",
+        "DB_BATCH_PASSWORD": "${DB_BATCH_PASSWORD}"
+      },
+      "volumes": [
+        "pgdata:/var/lib/postgresql/data",
+        "./infra/postgres/init.sh:/docker-entrypoint-initdb.d/init.sh:ro"
+      ],
+      "healthcheck": {
+        "test": [
+          "CMD-SHELL",
+          "pg_isready -U postgres"
+        ],
+        "interval": "5s",
+        "retries": 20
+      },
+      "networks": [
+        "bank"
+      ]
+    },
+    "kafka": {
+      "image": "apache/kafka:3.9.1",
+      "environment": {
+        "KAFKA_NODE_ID": 1,
+        "KAFKA_PROCESS_ROLES": "broker,controller",
+        "KAFKA_LISTENERS": "PLAINTEXT://:9092,CONTROLLER://:9093",
+        "KAFKA_ADVERTISED_LISTENERS": "PLAINTEXT://kafka:9092",
+        "KAFKA_CONTROLLER_LISTENER_NAMES": "CONTROLLER",
+        "KAFKA_LISTENER_SECURITY_PROTOCOL_MAP": "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT",
+        "KAFKA_CONTROLLER_QUORUM_VOTERS": "1@kafka:9093",
+        "KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR": 1,
+        "KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR": 1,
+        "KAFKA_TRANSACTION_STATE_LOG_MIN_ISR": 1,
+        "KAFKA_LOG_DIRS": "/tmp/kraft-combined-logs"
+      },
+      "volumes": [
+        "kafkadata:/tmp/kraft-combined-logs"
+      ],
+      "healthcheck": {
+        "test": [
+          "CMD-SHELL",
+          "/opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --list >/dev/null"
+        ],
+        "interval": "10s",
+        "timeout": "10s",
+        "retries": 20
+      },
+      "networks": [
+        "bank"
+      ],
+      "mem_limit": "768m",
+      "depends_on": {
+        "kafka-volume-init": {
+          "condition": "service_completed_successfully"
+        }
+      },
+      "restart": "unless-stopped"
+    },
+    "kafka-init": {
+      "image": "apache/kafka:3.9.1",
+      "depends_on": {
+        "kafka": {
+          "condition": "service_healthy"
+        }
+      },
+      "entrypoint": [
+        "/bin/sh",
+        "-c"
+      ],
+      "command": [
+        "for topic in transactions.completed.v1 security.alerts.v1 transactions.completed.v1.DLT security.alerts.v1.DLT; do /opt/kafka/bin/kafka-topics.sh --bootstrap-server kafka:9092 --create --if-not-exists --topic $$topic --partitions 3 --replication-factor 1; done"
+      ],
+      "networks": [
+        "bank"
+      ]
+    },
+    "artemis": {
+      "image": "apache/activemq-artemis:2.42.0",
+      "environment": {
+        "ARTEMIS_USER": "${BROKER_USER}",
+        "ARTEMIS_PASSWORD": "${BROKER_PASSWORD}"
+      },
+      "volumes": [
+        "artemisdata:/var/lib/artemis-instance"
+      ],
+      "healthcheck": {
+        "test": [
+          "CMD-SHELL",
+          "/opt/activemq-artemis/bin/artemis check node --url tcp://localhost:61616 --user \"$$ARTEMIS_USER\" --password \"$$ARTEMIS_PASSWORD\""
+        ],
+        "interval": "10s",
+        "timeout": "10s",
+        "retries": 20
+      },
+      "networks": [
+        "bank"
+      ],
+      "mem_limit": "512m"
+    },
+    "config-server": {
+      "restart": "unless-stopped",
+      "mem_limit": "512m",
+      "networks": [
+        "bank"
+      ],
+      "build": {
+        "context": ".",
+        "args": {
+          "MODULE": "config-server"
+        }
+      },
+      "image": "banco-eft/config-server:1.0.0",
+      "healthcheck": {
+        "test": [
+          "CMD-SHELL",
+          "curl -fsS http://localhost:8888/actuator/health/readiness >/dev/null || curl -fsS http://localhost:8888/actuator/health >/dev/null"
+        ],
+        "interval": "10s",
+        "timeout": "5s",
+        "retries": 30,
+        "start_period": "60s"
+      },
+      "ports": [
+        "127.0.0.1:8888:8888"
+      ],
+      "environment": {
+        "INFRA_USER": "${CONFIG_USER}",
+        "INFRA_PASSWORD": "${CONFIG_PASSWORD}"
+      }
+    },
+    "discovery-server": {
+      "restart": "unless-stopped",
+      "mem_limit": "512m",
+      "networks": [
+        "bank"
+      ],
+      "build": {
+        "context": ".",
+        "args": {
+          "MODULE": "discovery-server"
+        }
+      },
+      "image": "banco-eft/discovery-server:1.0.0",
+      "healthcheck": {
+        "test": [
+          "CMD-SHELL",
+          "curl -fsS http://localhost:8761/actuator/health/readiness >/dev/null || curl -fsS http://localhost:8761/actuator/health >/dev/null"
+        ],
+        "interval": "10s",
+        "timeout": "5s",
+        "retries": 30,
+        "start_period": "60s"
+      },
+      "ports": [
+        "127.0.0.1:8761:8761"
+      ],
+      "environment": {
+        "INFRA_USER": "${EUREKA_USER}",
+        "INFRA_PASSWORD": "${EUREKA_PASSWORD}"
+      }
+    },
+    "auth-server": {
+      "restart": "unless-stopped",
+      "mem_limit": "512m",
+      "networks": [
+        "bank"
+      ],
+      "build": {
+        "context": ".",
+        "args": {
+          "MODULE": "auth-server"
+        }
+      },
+      "image": "banco-eft/auth-server:1.0.0",
+      "healthcheck": {
+        "test": [
+          "CMD-SHELL",
+          "curl -fsS http://localhost:9000/actuator/health/readiness >/dev/null || curl -fsS http://localhost:9000/actuator/health >/dev/null"
+        ],
+        "interval": "10s",
+        "timeout": "5s",
+        "retries": 30,
+        "start_period": "60s"
+      },
+      "ports": [
+        "127.0.0.1:9000:9000"
+      ],
+      "volumes": [
+        "authdata:/app/runtime"
+      ],
+      "environment": {
+        "OAUTH_ISSUER": "${OAUTH_ISSUER}",
+        "WEB_CLI_SECRET": "${WEB_CLI_SECRET}",
+        "MOBILE_CLI_SECRET": "${MOBILE_CLI_SECRET}",
+        "ATM_CLI_SECRET": "${ATM_CLI_SECRET}",
+        "TELLER_CLI_SECRET": "${TELLER_CLI_SECRET}",
+        "OPERATOR_CLI_SECRET": "${OPERATOR_CLI_SECRET}",
+        "READER_CLI_SECRET": "${READER_CLI_SECRET}",
+        "FOREIGN_CLI_SECRET": "${FOREIGN_CLI_SECRET}",
+        "PAYMENTS_WORKER_SECRET": "${PAYMENTS_WORKER_SECRET}"
+      }
+    },
+    "accounts-service": {
+      "restart": "unless-stopped",
+      "mem_limit": "512m",
+      "networks": [
+        "bank"
+      ],
+      "build": {
+        "context": ".",
+        "args": {
+          "MODULE": "accounts-service"
+        }
+      },
+      "image": "banco-eft/accounts-service:1.0.0",
+      "healthcheck": {
+        "test": [
+          "CMD-SHELL",
+          "curl -fsS http://localhost:8080/actuator/health/readiness >/dev/null || curl -fsS http://localhost:8080/actuator/health >/dev/null"
+        ],
+        "interval": "10s",
+        "timeout": "5s",
+        "retries": 30,
+        "start_period": "60s"
+      },
+      "ports": [
+        "127.0.0.1:8081:8080"
+      ],
+      "depends_on": {
+        "config-server": {
+          "condition": "service_healthy"
+        },
+        "discovery-server": {
+          "condition": "service_healthy"
+        },
+        "auth-server": {
+          "condition": "service_healthy"
+        },
+        "postgres": {
+          "condition": "service_healthy"
+        }
+      },
+      "environment": {
+        "CONFIG_USER": "${CONFIG_USER}",
+        "CONFIG_PASSWORD": "${CONFIG_PASSWORD}",
+        "EUREKA_USER": "${EUREKA_USER}",
+        "EUREKA_PASSWORD": "${EUREKA_PASSWORD}",
+        "BROKER_USER": "${BROKER_USER}",
+        "BROKER_PASSWORD": "${BROKER_PASSWORD}",
+        "OAUTH_ISSUER": "${OAUTH_ISSUER}",
+        "ATM_PIN_HASH": "${ATM_PIN_HASH}",
+        "PAYMENTS_WORKER_SECRET": "${PAYMENTS_WORKER_SECRET}",
+        "BATCH_WORKERS": "${BATCH_WORKERS}",
+        "DB_NAME": "bank_accounts",
+        "DB_USER": "bank_accounts",
+        "DB_PASSWORD": "${DB_ACCOUNTS_PASSWORD}"
+      }
+    },
+    "payments-service": {
+      "restart": "unless-stopped",
+      "mem_limit": "512m",
+      "networks": [
+        "bank"
+      ],
+      "build": {
+        "context": ".",
+        "args": {
+          "MODULE": "payments-service"
+        }
+      },
+      "image": "banco-eft/payments-service:1.0.0",
+      "healthcheck": {
+        "test": [
+          "CMD-SHELL",
+          "curl -fsS http://localhost:8080/actuator/health/readiness >/dev/null || curl -fsS http://localhost:8080/actuator/health >/dev/null"
+        ],
+        "interval": "10s",
+        "timeout": "5s",
+        "retries": 30,
+        "start_period": "60s"
+      },
+      "ports": [
+        "127.0.0.1:8082:8080"
+      ],
+      "depends_on": {
+        "config-server": {
+          "condition": "service_healthy"
+        },
+        "discovery-server": {
+          "condition": "service_healthy"
+        },
+        "auth-server": {
+          "condition": "service_healthy"
+        },
+        "postgres": {
+          "condition": "service_healthy"
+        },
+        "kafka-init": {
+          "condition": "service_completed_successfully"
+        },
+        "artemis": {
+          "condition": "service_healthy"
+        }
+      },
+      "environment": {
+        "CONFIG_USER": "${CONFIG_USER}",
+        "CONFIG_PASSWORD": "${CONFIG_PASSWORD}",
+        "EUREKA_USER": "${EUREKA_USER}",
+        "EUREKA_PASSWORD": "${EUREKA_PASSWORD}",
+        "BROKER_USER": "${BROKER_USER}",
+        "BROKER_PASSWORD": "${BROKER_PASSWORD}",
+        "OAUTH_ISSUER": "${OAUTH_ISSUER}",
+        "ATM_PIN_HASH": "${ATM_PIN_HASH}",
+        "PAYMENTS_WORKER_SECRET": "${PAYMENTS_WORKER_SECRET}",
+        "BATCH_WORKERS": "${BATCH_WORKERS}",
+        "DB_NAME": "bank_payments",
+        "DB_USER": "bank_payments",
+        "DB_PASSWORD": "${DB_PAYMENTS_PASSWORD}"
+      }
+    },
+    "customers-service": {
+      "restart": "unless-stopped",
+      "mem_limit": "512m",
+      "networks": [
+        "bank"
+      ],
+      "build": {
+        "context": ".",
+        "args": {
+          "MODULE": "customers-service"
+        }
+      },
+      "image": "banco-eft/customers-service:1.0.0",
+      "healthcheck": {
+        "test": [
+          "CMD-SHELL",
+          "curl -fsS http://localhost:8080/actuator/health/readiness >/dev/null || curl -fsS http://localhost:8080/actuator/health >/dev/null"
+        ],
+        "interval": "10s",
+        "timeout": "5s",
+        "retries": 30,
+        "start_period": "60s"
+      },
+      "ports": [
+        "127.0.0.1:8083:8080"
+      ],
+      "depends_on": {
+        "config-server": {
+          "condition": "service_healthy"
+        },
+        "discovery-server": {
+          "condition": "service_healthy"
+        },
+        "auth-server": {
+          "condition": "service_healthy"
+        },
+        "postgres": {
+          "condition": "service_healthy"
+        },
+        "kafka-init": {
+          "condition": "service_completed_successfully"
+        },
+        "artemis": {
+          "condition": "service_healthy"
+        }
+      },
+      "environment": {
+        "CONFIG_USER": "${CONFIG_USER}",
+        "CONFIG_PASSWORD": "${CONFIG_PASSWORD}",
+        "EUREKA_USER": "${EUREKA_USER}",
+        "EUREKA_PASSWORD": "${EUREKA_PASSWORD}",
+        "BROKER_USER": "${BROKER_USER}",
+        "BROKER_PASSWORD": "${BROKER_PASSWORD}",
+        "OAUTH_ISSUER": "${OAUTH_ISSUER}",
+        "ATM_PIN_HASH": "${ATM_PIN_HASH}",
+        "PAYMENTS_WORKER_SECRET": "${PAYMENTS_WORKER_SECRET}",
+        "BATCH_WORKERS": "${BATCH_WORKERS}",
+        "DB_NAME": "bank_customers",
+        "DB_USER": "bank_customers",
+        "DB_PASSWORD": "${DB_CUSTOMERS_PASSWORD}"
+      }
+    },
+    "batch-service": {
+      "restart": "unless-stopped",
+      "mem_limit": "512m",
+      "networks": [
+        "bank"
+      ],
+      "build": {
+        "context": ".",
+        "args": {
+          "MODULE": "batch-service"
+        }
+      },
+      "image": "banco-eft/batch-service:1.0.0",
+      "healthcheck": {
+        "test": [
+          "CMD-SHELL",
+          "curl -fsS http://localhost:8080/actuator/health/readiness >/dev/null || curl -fsS http://localhost:8080/actuator/health >/dev/null"
+        ],
+        "interval": "10s",
+        "timeout": "5s",
+        "retries": 30,
+        "start_period": "60s"
+      },
+      "ports": [
+        "127.0.0.1:8084:8080"
+      ],
+      "depends_on": {
+        "config-server": {
+          "condition": "service_healthy"
+        },
+        "discovery-server": {
+          "condition": "service_healthy"
+        },
+        "auth-server": {
+          "condition": "service_healthy"
+        },
+        "postgres": {
+          "condition": "service_healthy"
+        }
+      },
+      "volumes": [
+        "batchdata:/app/runtime"
+      ],
+      "environment": {
+        "CONFIG_USER": "${CONFIG_USER}",
+        "CONFIG_PASSWORD": "${CONFIG_PASSWORD}",
+        "EUREKA_USER": "${EUREKA_USER}",
+        "EUREKA_PASSWORD": "${EUREKA_PASSWORD}",
+        "BROKER_USER": "${BROKER_USER}",
+        "BROKER_PASSWORD": "${BROKER_PASSWORD}",
+        "OAUTH_ISSUER": "${OAUTH_ISSUER}",
+        "ATM_PIN_HASH": "${ATM_PIN_HASH}",
+        "PAYMENTS_WORKER_SECRET": "${PAYMENTS_WORKER_SECRET}",
+        "BATCH_WORKERS": "${BATCH_WORKERS}",
+        "DB_NAME": "bank_batch",
+        "DB_USER": "bank_batch",
+        "DB_PASSWORD": "${DB_BATCH_PASSWORD}"
+      }
+    },
+    "bff-web": {
+      "restart": "unless-stopped",
+      "mem_limit": "512m",
+      "networks": [
+        "bank"
+      ],
+      "build": {
+        "context": ".",
+        "args": {
+          "MODULE": "bff-web"
+        }
+      },
+      "image": "banco-eft/bff-web:1.0.0",
+      "healthcheck": {
+        "test": [
+          "CMD-SHELL",
+          "curl -fsS http://localhost:8080/actuator/health/readiness >/dev/null || curl -fsS http://localhost:8080/actuator/health >/dev/null"
+        ],
+        "interval": "10s",
+        "timeout": "5s",
+        "retries": 30,
+        "start_period": "60s"
+      },
+      "ports": [
+        "127.0.0.1:8091:8080"
+      ],
+      "depends_on": {
+        "config-server": {
+          "condition": "service_healthy"
+        },
+        "discovery-server": {
+          "condition": "service_healthy"
+        },
+        "auth-server": {
+          "condition": "service_healthy"
+        },
+        "postgres": {
+          "condition": "service_healthy"
+        }
+      },
+      "environment": {
+        "CONFIG_USER": "${CONFIG_USER}",
+        "CONFIG_PASSWORD": "${CONFIG_PASSWORD}",
+        "EUREKA_USER": "${EUREKA_USER}",
+        "EUREKA_PASSWORD": "${EUREKA_PASSWORD}",
+        "BROKER_USER": "${BROKER_USER}",
+        "BROKER_PASSWORD": "${BROKER_PASSWORD}",
+        "OAUTH_ISSUER": "${OAUTH_ISSUER}",
+        "ATM_PIN_HASH": "${ATM_PIN_HASH}",
+        "PAYMENTS_WORKER_SECRET": "${PAYMENTS_WORKER_SECRET}",
+        "BATCH_WORKERS": "${BATCH_WORKERS}",
+        "DB_NAME": "unused",
+        "DB_USER": "unused",
+        "DB_PASSWORD": "unused"
+      }
+    },
+    "bff-mobile": {
+      "restart": "unless-stopped",
+      "mem_limit": "512m",
+      "networks": [
+        "bank"
+      ],
+      "build": {
+        "context": ".",
+        "args": {
+          "MODULE": "bff-mobile"
+        }
+      },
+      "image": "banco-eft/bff-mobile:1.0.0",
+      "healthcheck": {
+        "test": [
+          "CMD-SHELL",
+          "curl -fsS http://localhost:8080/actuator/health/readiness >/dev/null || curl -fsS http://localhost:8080/actuator/health >/dev/null"
+        ],
+        "interval": "10s",
+        "timeout": "5s",
+        "retries": 30,
+        "start_period": "60s"
+      },
+      "ports": [
+        "127.0.0.1:8092:8080"
+      ],
+      "depends_on": {
+        "config-server": {
+          "condition": "service_healthy"
+        },
+        "discovery-server": {
+          "condition": "service_healthy"
+        },
+        "auth-server": {
+          "condition": "service_healthy"
+        },
+        "postgres": {
+          "condition": "service_healthy"
+        }
+      },
+      "environment": {
+        "CONFIG_USER": "${CONFIG_USER}",
+        "CONFIG_PASSWORD": "${CONFIG_PASSWORD}",
+        "EUREKA_USER": "${EUREKA_USER}",
+        "EUREKA_PASSWORD": "${EUREKA_PASSWORD}",
+        "BROKER_USER": "${BROKER_USER}",
+        "BROKER_PASSWORD": "${BROKER_PASSWORD}",
+        "OAUTH_ISSUER": "${OAUTH_ISSUER}",
+        "ATM_PIN_HASH": "${ATM_PIN_HASH}",
+        "PAYMENTS_WORKER_SECRET": "${PAYMENTS_WORKER_SECRET}",
+        "BATCH_WORKERS": "${BATCH_WORKERS}",
+        "DB_NAME": "unused",
+        "DB_USER": "unused",
+        "DB_PASSWORD": "unused"
+      }
+    },
+    "bff-atm": {
+      "restart": "unless-stopped",
+      "mem_limit": "512m",
+      "networks": [
+        "bank"
+      ],
+      "build": {
+        "context": ".",
+        "args": {
+          "MODULE": "bff-atm"
+        }
+      },
+      "image": "banco-eft/bff-atm:1.0.0",
+      "healthcheck": {
+        "test": [
+          "CMD-SHELL",
+          "curl -fsS http://localhost:8080/actuator/health/readiness >/dev/null || curl -fsS http://localhost:8080/actuator/health >/dev/null"
+        ],
+        "interval": "10s",
+        "timeout": "5s",
+        "retries": 30,
+        "start_period": "60s"
+      },
+      "ports": [
+        "127.0.0.1:8093:8080"
+      ],
+      "depends_on": {
+        "config-server": {
+          "condition": "service_healthy"
+        },
+        "discovery-server": {
+          "condition": "service_healthy"
+        },
+        "auth-server": {
+          "condition": "service_healthy"
+        },
+        "postgres": {
+          "condition": "service_healthy"
+        }
+      },
+      "environment": {
+        "CONFIG_USER": "${CONFIG_USER}",
+        "CONFIG_PASSWORD": "${CONFIG_PASSWORD}",
+        "EUREKA_USER": "${EUREKA_USER}",
+        "EUREKA_PASSWORD": "${EUREKA_PASSWORD}",
+        "BROKER_USER": "${BROKER_USER}",
+        "BROKER_PASSWORD": "${BROKER_PASSWORD}",
+        "OAUTH_ISSUER": "${OAUTH_ISSUER}",
+        "ATM_PIN_HASH": "${ATM_PIN_HASH}",
+        "PAYMENTS_WORKER_SECRET": "${PAYMENTS_WORKER_SECRET}",
+        "BATCH_WORKERS": "${BATCH_WORKERS}",
+        "DB_NAME": "unused",
+        "DB_USER": "unused",
+        "DB_PASSWORD": "unused"
+      }
+    },
+    "kafka-volume-init": {
+      "image": "alpine:3.21",
+      "user": "0:0",
+      "command": [
+        "chown",
+        "-R",
+        "1000:1000",
+        "/kafka-data"
+      ],
+      "volumes": [
+        "kafkadata:/kafka-data"
+      ],
+      "networks": [
+        "bank"
+      ]
+    }
+  },
+  "networks": {
+    "bank": {
+      "driver": "bridge"
+    }
+  },
+  "volumes": {
+    "pgdata": {},
+    "kafkadata": {},
+    "artemisdata": {},
+    "authdata": {},
+    "batchdata": {}
+  }
+}

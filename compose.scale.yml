@@ -1,0 +1,7 @@
+services:
+  accounts-service:
+    ports: !reset []
+  payments-service:
+    ports: !reset []
+  customers-service:
+    ports: !reset []

@@ -1,0 +1,6 @@
+package cl.bancoxyz.batchservice;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+@org.springframework.scheduling.annotation.EnableScheduling
+@SpringBootApplication(scanBasePackages={"cl.bancoxyz.batchservice", "cl.bancoxyz.common"})
+public class Application { public static void main(String[] args) {SpringApplication.run(Application.class,args);} }

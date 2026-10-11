@@ -1,0 +1,7 @@
+row_no,entity,value_date,type,value,description
+"1","101","2024-01","ahorro","12.50","John Doe"
+"2","102","2024-01","prestamo","80.00","Jane Smith"
+"5","105","2024-01","hipoteca","46.67","Charlie Green"
+"6","106","2024-01","ahorro","12.50","John Doe"
+"7","107","2024-01","prestamo","150.00","Diana Prince"
+"8","108","2024-01","ahorro","25.00","Steve Rogers"

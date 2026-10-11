@@ -1,10 +1,8 @@
 **/target
 .git
+runtime
 .env
-.env.*
-evidencias
-**/__pycache__
+certs
 
-README.md
-scripts
-datos
+__pycache__/
+*.pyc
